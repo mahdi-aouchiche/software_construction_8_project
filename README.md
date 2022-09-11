@@ -1,4 +1,6 @@
 # CS-100-Final-Project
+
+> Author: Mahdi Aouchiche (https://github.com/mahdi-aouchiche)
  
 A. Title of project
 B. What app do you plan to work on?
@@ -30,3 +32,20 @@ Finally, a main function is created to accomodate the user interface to easily n
 E.
 The input of this app is the different user selections for each pizza component (crust, sauce, chesse, desired types of toppings).
 The output of the app is the constructed pizza based on the user selection, a detailed receipt which shows the cost of each selected item, and the total cost.
+
+### To run the project nicely run the following commands
+```c++
+mkdir build
+cd build
+cmake ..
+make 
+```
+### 2 executables are created, use one of the commands to run an executable:
+```c++
+// run the unit tests
+./unit_tests
+
+// run the project
+./project
+
+```
