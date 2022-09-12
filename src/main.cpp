@@ -37,6 +37,7 @@ int main() {
 
     /* Display the choosen pizza */
     cout << my_pizza->get_type() << endl;
+    cout << "Pay: $" << cost << endl; 
     cout << "Your favorite pizza will be ready in 15 minutes :)" << endl << endl;
 
     return 0;
