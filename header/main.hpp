@@ -192,4 +192,36 @@ void choose_toppings(vector<Topping*> &my_toppings , Pizza* &my_pizza) {
     } while (true);
 }
 
+void print_receipt(Crust* &crust, Sauce* &sauce, Cheese* &cheese, Visitor* &cost_visitor, vector<Topping*> &toppings, double &cost) {
+    
+    cout << "*****************************" << endl;
+    cout << "******* YOUR  RECEIPT *******" << endl;
+    cout << "*****************************" << endl;
+    cout << "Base Pizza:" << endl;
+
+    printf( "  %-20s $%.2f\n", crust->get_crust_type().c_str(), crust->accept(cost_visitor));
+    cost += crust->accept(cost_visitor);
+
+    printf( "  %-20s $%.2f\n", sauce->get_sauce_type().c_str(), sauce->accept(cost_visitor));
+    cost += sauce->accept(cost_visitor);
+
+    printf( "  %-20s $%.2f\n", cheese->get_cheese_type().c_str(), cheese->accept(cost_visitor));
+    cost += cheese->accept(cost_visitor); 
+
+    cout << "-----------------------------" << endl;
+    cout << "Toppings:" << endl;
+    
+    for(int i = 0; i < toppings.size(); i++) {
+        printf( 
+            "  %-20s $%.2f\n", toppings.at(i)->get_topping_type().c_str(),
+            toppings.at(i)->accept(cost_visitor)
+        );
+        cost += toppings.at(i)->accept(cost_visitor);
+    }  
+    
+    cout << "*****************************" << endl;
+    printf( "Total: %-15s $%.2f \n", "", cost);
+    cout << "*****************************" << endl;
+}
+
 #endif // __MAIN_HPP__
