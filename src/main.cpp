@@ -4,11 +4,14 @@
 #include "../header/main.hpp"
 
 int main() {
-    /* Holds the cost total cost */
-    double cost = 0;   
-               
-    /* Create a cost visitor pointer for an updated cost */
+    /* Pointer to the created pizza */ 
+    Pizza* my_pizza;  
+
+    /* Use a visitor to get the cost of each pizza element */
     Visitor* cost_visitor  = new Cost_Visitor();
+
+    /* Variable to hold the total cost */ 
+    double cost = 0;  
     
     /* Build your pizza */
     cout << "BUILD YOUR FAVORITE PIZZA" << endl;
@@ -26,7 +29,7 @@ int main() {
     cout << "Your pizza will have " << my_cheese->get_cheese_type() << endl << endl;
 
     /* Create a base pizza and choose toppings to add*/
-    Pizza* my_pizza = new Pizza(my_crust, my_sauce, my_cheese);
+    my_pizza = new Pizza(my_crust, my_sauce, my_cheese);
     
     /* Add toppings */
     vector<Topping*> my_toppings; 
