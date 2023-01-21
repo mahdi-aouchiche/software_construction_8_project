@@ -3,7 +3,7 @@
 
 #include "headers/main_headers.hpp"
 
-/*Helper function used in main.cpp */
+/*Helper functions used in main.cpp */
 
 void crust_menu() {
     cout << "Select from menu a crust for your pizza:" << endl;
@@ -55,6 +55,7 @@ Crust* choose_crust() {
             cin.clear();            // reset failbit 
             cin.ignore(20, '\n');   //skip bad input
             cout << "Please choose a number from the menu!\n" << endl;
+        
         } else if(crust_type == 1) {
             my_crust = new Thick_Crust();
             break;
