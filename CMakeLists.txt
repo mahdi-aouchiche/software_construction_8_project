@@ -9,12 +9,11 @@ add_executable(unit_tests
     ../src/unit_test.cpp
 )
 
-add_executable(project
+add_executable(my_pizza
     ../src/main.cpp
 )
 
 target_link_libraries(unit_tests gtest)
-
 target_compile_definitions(unit_tests PRIVATE gtest_disable_pthreads=ON)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
