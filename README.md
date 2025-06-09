@@ -30,7 +30,6 @@ Once the base pizza selection is complete, the user is prompted to choose from d
 
 image:: ![Pizza Vending Machine Output](resources/pizza_vending_machine_output.png)
 
-
 ### To run the project nicely use the following commands
 
 ```c++
