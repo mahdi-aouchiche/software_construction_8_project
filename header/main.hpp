@@ -138,91 +138,106 @@ Cheese* choose_cheese() {
     return my_cheese; 
 }
 
-void choose_toppings(vector<Topping*> &my_toppings , Pizza* &my_pizza) {
+map<Topping*, int> choose_toppings(Pizza* &my_pizza) {
+    map<Topping*, int> toppings;
     int topping_type;
-    Topping* added_topping = nullptr;
 
+    // toppings to select from
+    Topping *bell_peppers = new Bell_Peppers(my_pizza);
+    Topping *mushrooms    = new Mushrooms(my_pizza);
+    Topping *olives       = new Olives(my_pizza);
+    Topping *tuna         = new Tuna(my_pizza);
+    
     do{
         topping_menu();
         cin >> topping_type;
 
-        if(!cin) { 
+        if(!cin) { /* Wrong input */
             cin.clear();
-            cin.ignore(20, '\n'); 
+            cin.ignore(255, '\n'); 
             invalid_input();
-        
-        } else if(topping_type == 0 || topping_type == 5) {
-            if(my_toppings.size() < 1) { /* No Toppings */
-                added_topping = new No_Topping(my_pizza);
-                my_toppings.push_back(added_topping);
-                my_pizza = added_topping; 
-                cout << "Your pizza will have " << added_topping->get_topping_type() << endl << endl; 
-                break;
-            }
-            /* Done with toppings */
-            cout << "You are done adding toppings." << endl << endl; 
-            break;
+            continue;
+        } 
+                    
+        if(topping_type == 0) { /* No Toppings */
+            // Return empty map with no toppings 
+            toppings.erase(toppings.begin(), toppings.end());
+            break;    
             
-        } else if(topping_type == 1) { /* Bell Peppers added */
-            added_topping = new Bell_Peppers(my_pizza);
-            my_toppings.push_back(added_topping);
-            my_pizza = added_topping;
-            cout << "Your pizza will have " << added_topping->get_topping_type() << endl << endl;
+        } else if(topping_type == 1) { /* Bell Peppers added */           
+            toppings[bell_peppers]++;
 
         } else if(topping_type == 2) { /* Mushrooms added */
-            added_topping = new Mushrooms(my_pizza);
-            my_toppings.push_back(added_topping);
-            my_pizza = added_topping;
-            cout << "Your pizza will have " << added_topping->get_topping_type() << endl << endl;
-        
+            toppings[mushrooms]++;
+
         } else if(topping_type == 3) { /* Olives added */
-            added_topping = new Olives(my_pizza);
-            my_toppings.push_back(added_topping);
-            my_pizza = added_topping;
-            cout << "Your pizza will have " << added_topping->get_topping_type() << endl << endl;
+            toppings[olives]++;
 
         } else if(topping_type == 4) { /* Tuna added */
-            added_topping = new Tuna(my_pizza);
-            my_toppings.push_back(added_topping);
-            my_pizza = added_topping;
-            cout << "Your pizza will have " << added_topping->get_topping_type() << endl << endl;
-        
+            toppings[tuna]++;
+
+        } else if(topping_type == 5) { /* Done with toppings */
+            cout << "You are done adding toppings." << endl;
+            break;
+
         } else {
             invalid_input();
         }
     } while (true);
+
+    if(toppings.empty()) {
+        cout << "No toppings added." << endl;
+    } else {
+        cout << "Added toppings: ";
+        
+        map<Topping*, int>::iterator t;
+        for(t = toppings.begin(); t != prev(toppings.end()); ++t) {
+            cout << t->first->get_topping_type() << "(x " << t->second << ")"<< ", ";
+        }
+        cout << t->first->get_topping_type() << "(x " << t->second << ")" << endl;
+    }
+    
+    return toppings;
 }
 
-void print_receipt(Crust* &crust, Sauce* &sauce, Cheese* &cheese, Visitor* &cost_visitor, vector<Topping*> &toppings, double &cost) {
+void print_receipt(Crust* &crust, Sauce* &sauce, Cheese* &cheese, Visitor* &cost_visitor, map<Topping*, int> &toppings, double &cost) {
     
-    cout << "*****************************" << endl;
-    cout << "******* YOUR  RECEIPT *******" << endl;
-    cout << "*****************************" << endl;
+    cout << "******************************" << endl;
+    cout << "******** YOUR RECEIPT ********" << endl;
+    cout << "******************************" << endl;
     cout << "Base Pizza:" << endl;
 
-    printf( "  %-20s $%.2f\n", crust->get_crust_type().c_str(), crust->accept(cost_visitor));
+    printf( "  %-22s $%.2f\n", crust->get_crust_type().c_str(), crust->accept(cost_visitor));
     cost += crust->accept(cost_visitor);
 
-    printf( "  %-20s $%.2f\n", sauce->get_sauce_type().c_str(), sauce->accept(cost_visitor));
+    printf( "  %-22s $%.2f\n", sauce->get_sauce_type().c_str(), sauce->accept(cost_visitor));
     cost += sauce->accept(cost_visitor);
 
-    printf( "  %-20s $%.2f\n", cheese->get_cheese_type().c_str(), cheese->accept(cost_visitor));
+    printf( "  %-22s $%.2f\n", cheese->get_cheese_type().c_str(), cheese->accept(cost_visitor));
     cost += cheese->accept(cost_visitor); 
 
-    cout << "-----------------------------" << endl;
+    cout << "------------------------------" << endl;
     cout << "Toppings:" << endl;
-    
-    for(int i = 0; i < toppings.size(); i++) {
-        printf( 
-            "  %-20s $%.2f\n", toppings.at(i)->get_topping_type().c_str(),
-            toppings.at(i)->accept(cost_visitor)
+        
+    for(auto t: toppings) {
+        printf(
+            "  %-18s %d x $%.2f\n", 
+            t.first->get_topping_type().c_str(), 
+            t.second,
+            t.first->accept(cost_visitor)
         );
-        cost += toppings.at(i)->accept(cost_visitor);
-    }  
-    
-    cout << "*****************************" << endl;
-    printf( "Total: %-15s $%.2f \n", "", cost);
-    cout << "*****************************" << endl;
+
+        cost += t.second * t.first->accept(cost_visitor);
+    }
+
+    if(toppings.empty()) {
+        printf( "  %-22s $%.2f\n", "No Toppins Added", 0.0);
+    }
+
+    cout << "******************************" << endl;
+    // printf( "%-23s $%*.2f \n", "Total:", 5, cost);
+    printf( "%-23s $%5.2f\n", "Total:", cost);
+    cout << "******************************" << endl;
 }
 
 #endif // __MAIN_HPP__
