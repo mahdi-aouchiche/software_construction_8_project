@@ -26,6 +26,11 @@ Once the base pizza selection is complete, the user is prompted to choose from d
 
 > Note: This design allows to easily add more option in the future, also it makes changing the prices very easy which is possible by using the visitor pattern.
 
+* Example of the output:
+
+image:: ![Pizza Vending Machine Output](resources/pizza_vending_machine_output.png)
+
+
 ### To run the project nicely use the following commands
 
 ```c++
